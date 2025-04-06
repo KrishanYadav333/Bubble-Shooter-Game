@@ -187,3 +187,79 @@ def rngame():
 
     score = Score()
 
+    while True:
+        dispsurf.fill(bgcolor)
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                terminate()
+
+            elif event.type == KEYDOWN:
+                if (event.key == K_LEFT):
+                    dir = LEFT
+                elif (event.key == K_RIGHT):
+                    dir = RIGHT
+
+            elif event.type == KEYUP:
+                dir = None
+                if event.key == K_SPACE:
+                    launchbb = True
+                elif event.key == K_ESCAPE:
+                    terminate()
+
+        if launchbb == True:
+            if newbb == None:
+                newbb = Bubble(nxtbb.color)
+                newbb.angle = arrow.angle
+
+            newbb.update()
+            newbb.draw()
+
+            if newbb.rect.right >= winwdth - 5:
+                newbb.angle = 180 - newbb.angle
+            elif newbb.rect.left <= 5:
+                newbb.angle = 180 - newbb.angle
+            launchbb, newbb, score = stbb(bbarr, newbb, launchbb, score)
+
+            fbblist = []
+            for row in range(len(bbarr)):
+                for col in range(len(bbarr[0])):
+                    if bbarr[row][col] != blank:
+                        fbblist.append(bbarr[row][col])
+                        if bbarr[row][col].rect.bottom > (winhgt - arrow.rect.height - 10):
+                            return score.total, 'lose'
+
+            if len(fbblist) < 1:
+                return score.total, 'win'
+            gameclrlist = updtclrlist(bbarr)
+            random.shuffle(gameclrlist)
+            if launchbb == False:
+
+                nxtbb = Bubble(gameclrlist[0])
+                nxtbb.rect.right = winwdth - 5
+                nxtbb.rect.bottom = winhgt - 5
+
+        nxtbb.draw()
+        if launchbb == True:
+            covnxtbb()
+
+        arrow.update(dir)
+        arrow.draw()
+
+        setarrpos(bbarr)
+        drawbbary(bbarr)
+
+        score.draw()
+
+        if pygame.mixer.music.get_busy() == False:
+            if track == len(musclist) - 1:
+                track = 0
+            else:
+                track += 1
+
+            pygame.mixer.music.load(musclist[track])
+            pygame.mixer.music.play()
+
+        pygame.display.update()
+        fpsclock.tick(FPS)
+
