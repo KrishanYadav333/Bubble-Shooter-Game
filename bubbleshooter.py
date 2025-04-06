@@ -166,3 +166,24 @@ def main():
         score, winorlose = rngame()
         endScreen(score, winorlose)
 
+
+def rngame():
+    musclist = ['audio1.ogg', 'audio2.ogg', 'audio3.ogg']
+    pygame.mixer.music.load(musclist[0])
+    pygame.mixer.music.play()
+    track = 0
+    gameclrlist = copy.deepcopy(clrlist)
+    dir = None
+    launchbb = False
+    newbb = None
+
+    arrow = Ary()
+    bbarr = mkeblkbrd()
+    setbb(bbarr, gameclrlist)
+
+    nxtbb = Bubble(gameclrlist[0])
+    nxtbb.rect.right = winwdth - 5
+    nxtbb.rect.bottom = winhgt - 5
+
+    score = Score()
+
