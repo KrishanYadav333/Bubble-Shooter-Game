@@ -276,3 +276,58 @@ def mkeblkbrd():
     return array
 
 
+def setbb(array, gameclrlist):
+    for row in range(bubblelyrs):
+        for col in range(len(array[row])):
+            random.shuffle(gameclrlist)
+            newbb = Bubble(gameclrlist[0], row, col)
+            array[row][col] = newbb
+
+    setarrpos(array)
+
+
+def setarrpos(array):
+    for row in range(aryhgt):
+        for col in range(len(array[row])):
+            if array[row][col] != blank:
+                array[row][col].rect.x = (bubblewdth * col) + 5
+                array[row][col].rect.y = (bubblewdth * row) + 5
+
+    for row in range(1, aryhgt, 2):
+        for col in range(len(array[row])):
+            if array[row][col] != blank:
+                array[row][col].rect.x += bubblerad
+
+    for row in range(1, aryhgt):
+        for col in range(len(array[row])):
+            if array[row][col] != blank:
+                array[row][col].rect.y -= (bubadjst * row)
+
+    delextrbb(array)
+
+
+def delextrbb(array):
+    for row in range(aryhgt):
+        for col in range(len(array[row])):
+            if array[row][col] != blank:
+                if array[row][col].rect.right > winwdth:
+                    array[row][col] = blank
+
+
+def updtclrlist(bbarr):
+    newColorList = []
+    for row in range(len(bbarr)):
+        for col in range(len(bbarr[0])):
+            if bbarr[row][col] != blank:
+                newColorList.append(bbarr[row][col].color)
+
+    colorSet = set(newColorList)
+
+    if len(colorSet) < 1:
+        colorList = []
+        colorList.append(white)
+        return colorList
+    else:
+
+        return list(colorSet)
+
