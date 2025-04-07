@@ -263,3 +263,16 @@ def rngame():
         pygame.display.update()
         fpsclock.tick(FPS)
 
+
+def mkeblkbrd():
+    array = []
+
+    for row in range(aryhgt):
+        col = []
+        for i in range(arywdth):
+            col.append(blank)
+        array.append(col)
+
+    return array
+
+
