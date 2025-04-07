@@ -331,3 +331,56 @@ def updtclrlist(bbarr):
 
         return list(colorSet)
 
+
+def chkfflotrs(bbarr):
+    bubbleList = [col for col in range(len(bbarr[0]))
+                  if bbarr[0][col] != blank]
+
+    newbbList = []
+
+    for i in range(len(bubbleList)):
+        if i == 0:
+            newbbList.append(bubbleList[i])
+        elif bubbleList[i] > bubbleList[i - 1] + 1:
+            newbbList.append(bubbleList[i])
+
+    cpyofbrd = copy.deepcopy(bbarr)
+
+    for row in range(len(bbarr)):
+        for col in range(len(bbarr[0])):
+            bbarr[row][col] = blank
+
+    for col in newbbList:
+        popflotrs(bbarr, cpyofbrd, col)
+
+
+def popflotrs(bbarr, cpyofbrd, col, row=0):
+    if (row < 0 or row > (len(bbarr)-1)
+            or col < 0 or col > (len(bbarr[0])-1)):
+        return
+    elif cpyofbrd[row][col] == blank:
+        return
+    elif bbarr[row][col] == cpyofbrd[row][col]:
+        return
+    bbarr[row][col] = cpyofbrd[row][col]
+    if(row == 0):
+        popflotrs(bbarr, cpyofbrd, col + 1, row)
+        popflotrs(bbarr, cpyofbrd, col - 1, row)
+        popflotrs(bbarr, cpyofbrd, col, row + 1)
+        popflotrs(bbarr, cpyofbrd, col - 1, row + 1)
+    elif(row % 2 == 0):
+        popflotrs(bbarr, cpyofbrd, col + 1, row)
+        popflotrs(bbarr, cpyofbrd, col - 1, row)
+        popflotrs(bbarr, cpyofbrd, col, row + 1)
+        popflotrs(bbarr, cpyofbrd, col - 1, row + 1)
+        popflotrs(bbarr, cpyofbrd, col, row - 1)
+        popflotrs(bbarr, cpyofbrd, col - 1, row - 1)
+    else:
+        popflotrs(bbarr, cpyofbrd, col + 1, row)
+        popflotrs(bbarr, cpyofbrd, col - 1, row)
+        popflotrs(bbarr, cpyofbrd, col, row + 1)
+        popflotrs(bbarr, cpyofbrd, col + 1, row + 1)
+        popflotrs(bbarr, cpyofbrd, col, row - 1)
+        popflotrs(bbarr, cpyofbrd, col + 1, row - 1)
+
+
