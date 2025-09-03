@@ -126,7 +126,7 @@ class Ary(pygame.sprite.Sprite):
         elif (dir == RIGHT and self.angle > 0):
             self.angle -= 2
 
-        self.transformImage = pygame.transform.rotate(self.image, self.angle)
+        self.transformImage = pygame.transform.rotate(self.image, -self.angle)
         self.rect = self.transformImage.get_rect()
         self.rect.centerx = int(strx)
         self.rect.centery = strY
@@ -202,12 +202,17 @@ def rngame():
                 elif (event.key == K_RIGHT):
                     dir = RIGHT
 
-            elif event.type == KEYUP:
-                dir = None
-                if event.key == K_SPACE:
+            elif event.type == KEYDOWN:
+                if (event.key == K_LEFT):
+                    dir = LEFT
+                elif (event.key == K_RIGHT):
+                    dir = RIGHT
+                elif event.key == K_SPACE:
                     launchbb = True
                 elif event.key == K_ESCAPE:
                     terminate()
+            elif event.type == KEYUP:
+                dir = None
 
         if launchbb:
             if newbb is None:
@@ -242,7 +247,7 @@ def rngame():
                 nxtbb.rect.bottom = winhgt - 5
 
         nxtbb.draw()
-        if launchbb == True:
+        if launchbb:
             covnxtbb()
 
         arrow.update(dir)
@@ -253,7 +258,7 @@ def rngame():
 
         score.draw()
 
-        if pygame.mixer.music.get_busy() == False:
+        if not pygame.mixer.music.get_busy():
             if track == len(musclist) - 1:
                 track = 0
             else:
@@ -365,12 +370,12 @@ def popflotrs(bbarr, cpyofbrd, col, row=0):
     elif bbarr[row][col] == cpyofbrd[row][col]:
         return
     bbarr[row][col] = cpyofbrd[row][col]
-    if(row == 0):
+    if (row == 0):
         popflotrs(bbarr, cpyofbrd, col + 1, row)
         popflotrs(bbarr, cpyofbrd, col - 1, row)
         popflotrs(bbarr, cpyofbrd, col, row + 1)
         popflotrs(bbarr, cpyofbrd, col - 1, row + 1)
-    elif(row % 2 == 0):
+    elif (row % 2 == 0):
         popflotrs(bbarr, cpyofbrd, col + 1, row)
         popflotrs(bbarr, cpyofbrd, col - 1, row)
         popflotrs(bbarr, cpyofbrd, col, row + 1)
@@ -393,7 +398,7 @@ def stbb(bbarr, newbb, launchbb, score):
     for row in range(len(bbarr)):
         for col in range(len(bbarr[row])):
 
-            if (bbarr[row][col] != blank and newbb != None):
+            if (bbarr[row][col] != blank and newbb is not None):
                 if (pygame.sprite.collide_rect(newbb, bbarr[row][col])) or newbb.rect.top < 0:
                     if newbb.rect.top < 0:
                         newRow, newcol = addbbtotop(bbarr, newbb)
@@ -573,8 +578,9 @@ def covnxtbb():
 
 def endScreen(score, winorlose):
     endFont = pygame.font.SysFont('merlin', 50)
-    endMessage1 = endFont.render('You ' + winorlose + '! Hey Your Scored  ' + str(
-        score) + '. Press Enter to Play Again.', True, black, bgcolor)
+    endMessage1 = endFont.render(
+        'You ' + winorlose + '! Hey Your Scored  ' + str(score) +
+        '. Press Enter to Play Again.', True, black, bgcolor)
     endMessage1Rect = endMessage1.get_rect()
     endMessage1Rect.center = disprect.center
 
