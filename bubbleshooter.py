@@ -107,13 +107,12 @@ class Ary(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.angle = 90
-        arrimg = pygame.image.load('Arrow.png')
-        arrimg.convert_alpha()
-
-        arrowRect = arrimg.get_rect()
-        self.image = arrimg
+        # Create a surface for the arrow
+        self.image = pygame.Surface((50, 20), pygame.SRCALPHA)
+        # Draw arrow shape: triangle pointing right
+        pygame.draw.polygon(self.image, (255, 255, 255), [(0, 5), (30, 5), (30, 0), (50, 10), (30, 20), (30, 15), (0, 15)])
         self.transformImage = self.image
-        self.rect = arrowRect
+        self.rect = self.image.get_rect()
         self.rect.centerx = int(strx)
         self.rect.centery = strY
 
