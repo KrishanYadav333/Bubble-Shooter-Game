@@ -1,12 +1,12 @@
 import math
 import pygame
 import copy
-import time
 import sys
-import os
 import random
 import pygame.gfxdraw
-from pygame.locals import *
+from pygame.locals import (
+    QUIT, KEYDOWN, KEYUP, K_LEFT, K_RIGHT, K_SPACE, K_ESCAPE, K_RETURN
+)
 
 FPS = 120
 winwdth = 940
@@ -85,9 +85,11 @@ class Bubble(pygame.sprite.Sprite):
 
     def draw(self):
         pygame.gfxdraw.filled_circle(
-            dispsurf, self.rect.centerx, self.rect.centery, self.radius, self.color)
+            dispsurf, self.rect.centerx, self.rect.centery,
+            self.radius, self.color)
         pygame.gfxdraw.aacircle(
-            dispsurf, self.rect.centerx, self.rect.centery, self.radius, GRAY)
+            dispsurf, self.rect.centerx, self.rect.centery,
+            self.radius, GRAY)
 
     def xcalc(self, angle):
         radians = math.radians(angle)
@@ -207,8 +209,8 @@ def rngame():
                 elif event.key == K_ESCAPE:
                     terminate()
 
-        if launchbb == True:
-            if newbb == None:
+        if launchbb:
+            if newbb is None:
                 newbb = Bubble(nxtbb.color)
                 newbb.angle = arrow.angle
 
@@ -233,7 +235,7 @@ def rngame():
                 return score.total, 'win'
             gameclrlist = updtclrlist(bbarr)
             random.shuffle(gameclrlist)
-            if launchbb == False:
+            if not launchbb:
 
                 nxtbb = Bubble(gameclrlist[0])
                 nxtbb.rect.right = winwdth - 5
