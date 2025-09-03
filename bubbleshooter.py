@@ -1,12 +1,12 @@
 import math
 import pygame
 import copy
+import time
 import sys
+import os
 import random
 import pygame.gfxdraw
-from pygame.locals import (
-    QUIT, KEYDOWN, KEYUP, K_LEFT, K_RIGHT, K_SPACE, K_ESCAPE, K_RETURN
-)
+from pygame.locals import *
 
 FPS = 120
 winwdth = 940
@@ -85,11 +85,9 @@ class Bubble(pygame.sprite.Sprite):
 
     def draw(self):
         pygame.gfxdraw.filled_circle(
-            dispsurf, self.rect.centerx, self.rect.centery,
-            self.radius, self.color)
+            dispsurf, self.rect.centerx, self.rect.centery, self.radius, self.color)
         pygame.gfxdraw.aacircle(
-            dispsurf, self.rect.centerx, self.rect.centery,
-            self.radius, GRAY)
+            dispsurf, self.rect.centerx, self.rect.centery, self.radius, GRAY)
 
     def xcalc(self, angle):
         radians = math.radians(angle)
@@ -126,7 +124,7 @@ class Ary(pygame.sprite.Sprite):
         elif (dir == RIGHT and self.angle > 0):
             self.angle -= 2
 
-        self.transformImage = pygame.transform.rotate(self.image, -self.angle)
+        self.transformImage = pygame.transform.rotate(self.image, self.angle)
         self.rect = self.transformImage.get_rect()
         self.rect.centerx = int(strx)
         self.rect.centery = strY
@@ -202,20 +200,15 @@ def rngame():
                 elif (event.key == K_RIGHT):
                     dir = RIGHT
 
-            elif event.type == KEYDOWN:
-                if (event.key == K_LEFT):
-                    dir = LEFT
-                elif (event.key == K_RIGHT):
-                    dir = RIGHT
-                elif event.key == K_SPACE:
+            elif event.type == KEYUP:
+                dir = None
+                if event.key == K_SPACE:
                     launchbb = True
                 elif event.key == K_ESCAPE:
                     terminate()
-            elif event.type == KEYUP:
-                dir = None
 
-        if launchbb:
-            if newbb is None:
+        if launchbb == True:
+            if newbb == None:
                 newbb = Bubble(nxtbb.color)
                 newbb.angle = arrow.angle
 
@@ -233,21 +226,21 @@ def rngame():
                 for col in range(len(bbarr[0])):
                     if bbarr[row][col] != blank:
                         fbblist.append(bbarr[row][col])
-                        if bbarr[row][col].rect.bottom > (winhgt - arrow.rect.height - 10):
+                        if bbarr[row][col].rect.bottom > (winhgt + 50):
                             return score.total, 'lose'
 
             if len(fbblist) < 1:
                 return score.total, 'win'
             gameclrlist = updtclrlist(bbarr)
             random.shuffle(gameclrlist)
-            if not launchbb:
+            if launchbb == False:
 
                 nxtbb = Bubble(gameclrlist[0])
                 nxtbb.rect.right = winwdth - 5
                 nxtbb.rect.bottom = winhgt - 5
 
         nxtbb.draw()
-        if launchbb:
+        if launchbb == True:
             covnxtbb()
 
         arrow.update(dir)
@@ -258,7 +251,7 @@ def rngame():
 
         score.draw()
 
-        if not pygame.mixer.music.get_busy():
+        if pygame.mixer.music.get_busy() == False:
             if track == len(musclist) - 1:
                 track = 0
             else:
@@ -370,12 +363,12 @@ def popflotrs(bbarr, cpyofbrd, col, row=0):
     elif bbarr[row][col] == cpyofbrd[row][col]:
         return
     bbarr[row][col] = cpyofbrd[row][col]
-    if (row == 0):
+    if(row == 0):
         popflotrs(bbarr, cpyofbrd, col + 1, row)
         popflotrs(bbarr, cpyofbrd, col - 1, row)
         popflotrs(bbarr, cpyofbrd, col, row + 1)
         popflotrs(bbarr, cpyofbrd, col - 1, row + 1)
-    elif (row % 2 == 0):
+    elif(row % 2 == 0):
         popflotrs(bbarr, cpyofbrd, col + 1, row)
         popflotrs(bbarr, cpyofbrd, col - 1, row)
         popflotrs(bbarr, cpyofbrd, col, row + 1)
@@ -398,7 +391,7 @@ def stbb(bbarr, newbb, launchbb, score):
     for row in range(len(bbarr)):
         for col in range(len(bbarr[row])):
 
-            if (bbarr[row][col] != blank and newbb is not None):
+            if (bbarr[row][col] != blank and newbb != None):
                 if (pygame.sprite.collide_rect(newbb, bbarr[row][col])) or newbb.rect.top < 0:
                     if newbb.rect.top < 0:
                         newRow, newcol = addbbtotop(bbarr, newbb)
@@ -528,7 +521,7 @@ def popbb(bbarr, row, col, color, dellst):
     if(row == 0):
         popbb(bbarr, row, col-1, color, dellst)
         popbb(bbarr, row, col+1, color, dellst)
-        popbb(bbarr, row+1, color, dellst)
+        popbb(bbarr, row+1, col, color, dellst)
         popbb(bbarr, row+1, col-1, color, dellst)
     elif(row % 2 == 0):
         popbb(bbarr, row + 1, col, color, dellst)
@@ -578,9 +571,8 @@ def covnxtbb():
 
 def endScreen(score, winorlose):
     endFont = pygame.font.SysFont('merlin', 50)
-    endMessage1 = endFont.render(
-        'You ' + winorlose + '! Hey Your Scored  ' + str(score) +
-        '. Press Enter to Play Again.', True, black, bgcolor)
+    endMessage1 = endFont.render('You ' + winorlose + '! Hey Your Scored  ' + str(
+        score) + '. Press Enter to Play Again.', True, black, bgcolor)
     endMessage1Rect = endMessage1.get_rect()
     endMessage1Rect.center = disprect.center
 
