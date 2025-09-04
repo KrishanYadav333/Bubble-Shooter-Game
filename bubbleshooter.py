@@ -49,7 +49,7 @@ white = (255, 255, 255)
 cyan = (0, 255, 255)
 black = (0, 0, 0)
 
-bgcolor = vblue
+bgcolor = (0, 50, 100)
 clrlist = [grey, blue, red, white, pink, peach, hotpink, green,
            deeppink, peacockblue, grapecolor, amber, comic, lytgray]
 
@@ -88,6 +88,10 @@ class Bubble(pygame.sprite.Sprite):
             dispsurf, self.rect.centerx, self.rect.centery, self.radius, self.color)
         pygame.gfxdraw.aacircle(
             dispsurf, self.rect.centerx, self.rect.centery, self.radius, GRAY)
+        # Add highlight for 3D effect
+        highlight_radius = self.radius // 3
+        pygame.gfxdraw.filled_circle(
+            dispsurf, self.rect.centerx - self.radius // 4, self.rect.centery - self.radius // 4, highlight_radius, white)
 
     def xcalc(self, angle):
         radians = math.radians(angle)
@@ -107,10 +111,10 @@ class Ary(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.angle = 90
-        # Create a surface for the arrow
-        self.image = pygame.Surface((50, 20), pygame.SRCALPHA)
-        # Draw arrow shape: triangle pointing right
-        pygame.draw.polygon(self.image, (255, 255, 255), [(0, 5), (30, 5), (30, 0), (50, 10), (30, 20), (30, 15), (0, 15)])
+        # Load arrow image
+        self.image = pygame.image.load('Arrow.png').convert_alpha()
+        # Scale if necessary (adjust size to fit)
+        self.image = pygame.transform.scale(self.image, (50, 20))
         self.transformImage = self.image
         self.rect = self.image.get_rect()
         self.rect.centerx = int(strx)
@@ -135,9 +139,9 @@ class Ary(pygame.sprite.Sprite):
 class Score(object):
     def __init__(self):
         self.total = 0
-        self.font = pygame.font.SysFont('merlin', 35)
+        self.font = pygame.font.SysFont('Arial', 40)
         self.render = self.font.render(
-            'Score: ' + str(self.total), True, black, white)
+            'Score: ' + str(self.total), True, (255, 255, 0), bgcolor)
         self.rect = self.render.get_rect()
         self.rect.left = 5
         self.rect.bottom = winhgt - 5
@@ -145,7 +149,7 @@ class Score(object):
     def update(self, dellst):
         self.total += ((len(dellst)) * 10)
         self.render = self.font.render(
-            'Score: ' + str(self.total), True, black, white)
+            'Score: ' + str(self.total), True, (255, 255, 0), bgcolor)
 
     def draw(self):
         dispsurf.blit(self.render, self.rect)
@@ -153,12 +157,13 @@ class Score(object):
 
 def main():
 
-    global fpsclock, dispsurf, disprect, mainfont
+    global fpsclock, dispsurf, disprect, mainfont, titleFont
     pygame.init()
 
     fpsclock = pygame.time.Clock()
     pygame.display.set_caption('Bubble Shooter')
-    mainfont = pygame.font.SysFont('Comic Sans MS', txthgt)
+    mainfont = pygame.font.SysFont('Arial', 25)
+    titleFont = pygame.font.SysFont('Arial', 50)
     dispsurf, disprect = makeDisplay()
 
     while True:
@@ -188,6 +193,19 @@ def rngame():
 
     while True:
         dispsurf.fill(bgcolor)
+        pygame.draw.rect(dispsurf, white, (0, 0, winwdth, winhgt), 10)
+
+        titleShadow = titleFont.render('Bubble Shooter', True, black, bgcolor)
+        titleShadowRect = titleShadow.get_rect()
+        titleShadowRect.centerx = winwdth // 2 + 2
+        titleShadowRect.top = 17
+        dispsurf.blit(titleShadow, titleShadowRect)
+
+        titleText = titleFont.render('Bubble Shooter', True, white, bgcolor)
+        titleRect = titleText.get_rect()
+        titleRect.centerx = winwdth // 2
+        titleRect.top = 15
+        dispsurf.blit(titleText, titleRect)
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -238,6 +256,11 @@ def rngame():
                 nxtbb.rect.right = winwdth - 5
                 nxtbb.rect.bottom = winhgt - 5
 
+        nextText = mainfont.render('Next:', True, white, bgcolor)
+        nextRect = nextText.get_rect()
+        nextRect.right = winwdth - 5
+        nextRect.bottom = winhgt - 50
+        dispsurf.blit(nextText, nextRect)
         nxtbb.draw()
         if launchbb == True:
             covnxtbb()
@@ -249,6 +272,12 @@ def rngame():
         drawbbary(bbarr)
 
         score.draw()
+
+        instrText = mainfont.render('Arrow keys: aim | Space: shoot | Esc: quit', True, white, bgcolor)
+        instrRect = instrText.get_rect()
+        instrRect.centerx = winwdth // 2
+        instrRect.top = 70
+        dispsurf.blit(instrText, instrRect)
 
         if pygame.mixer.music.get_busy() == False:
             if track == len(musclist) - 1:
@@ -569,14 +598,26 @@ def covnxtbb():
 
 
 def endScreen(score, winorlose):
-    endFont = pygame.font.SysFont('merlin', 50)
-    endMessage1 = endFont.render('You ' + winorlose + '! Hey Your Scored  ' + str(
-        score) + '. Press Enter to Play Again.', True, black, bgcolor)
+    endFont = pygame.font.SysFont('Arial', 60)
+    endMessage1 = endFont.render('You ' + winorlose + '!', True, white, bgcolor)
     endMessage1Rect = endMessage1.get_rect()
-    endMessage1Rect.center = disprect.center
+    endMessage1Rect.centerx = disprect.centerx
+    endMessage1Rect.centery = disprect.centery - 50
+
+    endMessage2 = endFont.render('Score: ' + str(score), True, white, bgcolor)
+    endMessage2Rect = endMessage2.get_rect()
+    endMessage2Rect.centerx = disprect.centerx
+    endMessage2Rect.centery = disprect.centery
+
+    endMessage3 = endFont.render('Press Enter to Play Again', True, white, bgcolor)
+    endMessage3Rect = endMessage3.get_rect()
+    endMessage3Rect.centerx = disprect.centerx
+    endMessage3Rect.centery = disprect.centery + 50
 
     dispsurf.fill(bgcolor)
     dispsurf.blit(endMessage1, endMessage1Rect)
+    dispsurf.blit(endMessage2, endMessage2Rect)
+    dispsurf.blit(endMessage3, endMessage3Rect)
     pygame.display.update()
 
     while True:
