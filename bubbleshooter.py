@@ -114,7 +114,7 @@ class Ary(pygame.sprite.Sprite):
         # Load arrow image
         self.image = pygame.image.load('Arrow.png').convert_alpha()
         # Scale if necessary (adjust size to fit)
-        self.image = pygame.transform.scale(self.image, (50, 20))
+        self.image = pygame.transform.scale(self.image, (60, 24))
         self.transformImage = self.image
         self.rect = self.image.get_rect()
         self.rect.centerx = int(strx)
@@ -143,8 +143,8 @@ class Score(object):
         self.render = self.font.render(
             'Score: ' + str(self.total), True, (255, 255, 0), bgcolor)
         self.rect = self.render.get_rect()
-        self.rect.left = 5
-        self.rect.bottom = winhgt - 5
+        self.rect.left = 15
+        self.rect.bottom = winhgt - 15
 
     def update(self, dellst):
         self.total += ((len(dellst)) * 10)
@@ -163,7 +163,7 @@ def main():
     fpsclock = pygame.time.Clock()
     pygame.display.set_caption('Bubble Shooter')
     mainfont = pygame.font.SysFont('Arial', 25)
-    titleFont = pygame.font.SysFont('Arial', 50)
+    titleFont = pygame.font.SysFont('Arial', 35)
     dispsurf, disprect = makeDisplay()
 
     while True:
@@ -186,8 +186,8 @@ def rngame():
     setbb(bbarr, gameclrlist)
 
     nxtbb = Bubble(gameclrlist[0])
-    nxtbb.rect.right = winwdth - 5
-    nxtbb.rect.bottom = winhgt - 5
+    nxtbb.rect.right = winwdth - 25
+    nxtbb.rect.bottom = winhgt - 15
 
     score = Score()
 
@@ -204,7 +204,7 @@ def rngame():
         titleText = titleFont.render('Bubble Shooter', True, white, bgcolor)
         titleRect = titleText.get_rect()
         titleRect.centerx = winwdth // 2
-        titleRect.top = 15
+        titleRect.top = 28
         dispsurf.blit(titleText, titleRect)
 
         for event in pygame.event.get():
@@ -253,13 +253,13 @@ def rngame():
             if launchbb == False:
 
                 nxtbb = Bubble(gameclrlist[0])
-                nxtbb.rect.right = winwdth - 5
-                nxtbb.rect.bottom = winhgt - 5
+                nxtbb.rect.right = winwdth - 15
+                nxtbb.rect.bottom = winhgt - 15
 
         nextText = mainfont.render('Next:', True, white, bgcolor)
         nextRect = nextText.get_rect()
-        nextRect.right = winwdth - 5
-        nextRect.bottom = winhgt - 50
+        nextRect.right = winwdth - 15
+        nextRect.bottom = winhgt - 60
         dispsurf.blit(nextText, nextRect)
         nxtbb.draw()
         if launchbb == True:
@@ -276,7 +276,7 @@ def rngame():
         instrText = mainfont.render('Arrow keys: aim | Space: shoot | Esc: quit', True, white, bgcolor)
         instrRect = instrText.get_rect()
         instrRect.centerx = winwdth // 2
-        instrRect.top = 70
+        instrRect.top = 5
         dispsurf.blit(instrText, instrRect)
 
         if pygame.mixer.music.get_busy() == False:
@@ -318,8 +318,8 @@ def setarrpos(array):
     for row in range(aryhgt):
         for col in range(len(array[row])):
             if array[row][col] != blank:
-                array[row][col].rect.x = (bubblewdth * col) + 5
-                array[row][col].rect.y = (bubblewdth * row) + 5
+                array[row][col].rect.x = (bubblewdth * col) + 15
+                array[row][col].rect.y = (bubblewdth * row) + 87
 
     for row in range(1, aryhgt, 2):
         for col in range(len(array[row])):
