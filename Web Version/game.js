@@ -223,10 +223,10 @@ class BubbleShooter {
         while (angle > Math.PI) angle -= 2 * Math.PI;
         while (angle < -Math.PI) angle += 2 * Math.PI;
 
-        // Limit angle to prevent shooting too far back
-        // Allow shooting from -90° to +90° (left to right)
-        const minAngle = -Math.PI / 2; // -90°
-        const maxAngle = Math.PI / 2;  // +90°
+        // Limit angle to 80° on each side (total 160° range)
+        // Allow shooting from -80° to +80° (left to right)
+        const minAngle = -Math.PI * 80 / 180; // -80°
+        const maxAngle = Math.PI * 80 / 180;  // +80°
 
         if (angle < minAngle) angle = minAngle;
         if (angle > maxAngle) angle = maxAngle;
@@ -424,15 +424,10 @@ class BubbleShooter {
             const rotationAngle = this.aiming ? this.aimAngle : this.defaultAimAngle;
 
 
-            // Try different rotation approaches
-            // Option 1: Direct rotation (if arrow points up by default)
-            this.ctx.rotate(rotationAngle);
-
-            // Option 2: If arrow points right, rotate to point up
-            // this.ctx.rotate(rotationAngle - Math.PI / 2);
-
-            // Option 3: If arrow points down, rotate to point up
-            // this.ctx.rotate(rotationAngle + Math.PI);
+            // Rotate arrow to point in the correct direction
+            // If fallback arrow points right, rotate -90° to point up initially
+            const baseRotation = this.arrowLoaded && this.arrowImage.src.includes('data:') ? -Math.PI / 2 : 0;
+            this.ctx.rotate(rotationAngle + baseRotation);
 
             this.ctx.drawImage(
                 this.arrowImage,
