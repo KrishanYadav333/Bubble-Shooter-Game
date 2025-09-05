@@ -2,6 +2,12 @@
 
 Welcome to **Bubble Shooter**! This is a fun and addictive puzzle game where you shoot colorful bubbles to create matches and clear the board. Pop bubbles of the same color to rack up points and try to clear all the bubbles before they reach the bottom!
 
+## 📂 Branches
+
+- **main**: Latest stable version
+- **python-desktop**: Python/Pygame desktop version (current)
+- **web-version**: Upcoming web-based version (planned)
+
 ## 🎮 Game Overview
 
 In Bubble Shooter, you're armed with a launcher at the bottom of the screen. Your goal is to shoot bubbles upwards to match them with bubbles of the same color already on the board. When you create a group of 3 or more bubbles of the same color, they pop! The more bubbles you pop at once, the higher your score.
