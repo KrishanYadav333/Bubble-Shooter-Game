@@ -47,7 +47,7 @@ class BubbleShooter {
         this.arrowLoaded = false;
         this.arrowWidth = 60;
         this.arrowHeight = 24;
-        this.defaultAimAngle = Math.PI / 2; // Point straight right by default (90°)
+        this.defaultAimAngle = 0; // Point straight up by default (0°)
 
         // Mouse/Touch handling
         this.mouseX = 0;
@@ -393,36 +393,19 @@ class BubbleShooter {
             // Use current aim angle if aiming, otherwise use default
             const rotationAngle = this.aiming ? this.aimAngle : this.defaultAimAngle;
 
-            // Debug: Draw angle indicator
-            this.ctx.beginPath();
-            this.ctx.arc(0, 0, 30, 0, rotationAngle, false);
-            this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-            this.ctx.lineWidth = 2;
-            this.ctx.stroke();
 
-            // Handle arrow rotation with proper flipping for left side
-            if (rotationAngle < 0) {
-                // For left side, flip the image horizontally
-                this.ctx.scale(-1, 1);
-                this.ctx.rotate(-rotationAngle); // Use positive angle after flip
-                this.ctx.drawImage(
-                    this.arrowImage,
-                    -this.arrowWidth / 2,
-                    -this.arrowHeight / 2,
-                    this.arrowWidth,
-                    this.arrowHeight
-                );
-            } else {
-                // For right side, draw normally
-                this.ctx.rotate(rotationAngle);
-                this.ctx.drawImage(
-                    this.arrowImage,
-                    -this.arrowWidth / 2,
-                    -this.arrowHeight / 2,
-                    this.arrowWidth,
-                    this.arrowHeight
-                );
-            }
+            // Handle arrow rotation - adjust for image orientation
+            // If arrow points right by default, we need to rotate it to point up
+            const adjustedAngle = rotationAngle - Math.PI / 2; // Convert from up-pointing to right-pointing
+
+            this.ctx.rotate(adjustedAngle);
+            this.ctx.drawImage(
+                this.arrowImage,
+                -this.arrowWidth / 2,
+                -this.arrowHeight / 2,
+                this.arrowWidth,
+                this.arrowHeight
+            );
             this.ctx.restore();
         }
     }
