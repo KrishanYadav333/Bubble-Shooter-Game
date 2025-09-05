@@ -47,6 +47,7 @@ class BubbleShooter {
         this.arrowLoaded = false;
         this.arrowWidth = 60;
         this.arrowHeight = 24;
+        this.defaultAimAngle = 0; // Point straight up by default (0°)
 
         // Mouse/Touch handling
         this.mouseX = 0;
@@ -77,8 +78,42 @@ class BubbleShooter {
         this.arrowImage = new Image();
         this.arrowImage.onload = () => {
             this.arrowLoaded = true;
+            console.log('Arrow image loaded successfully', this.arrowImage.width, 'x', this.arrowImage.height);
+        };
+        this.arrowImage.onerror = () => {
+            console.error('Failed to load arrow image');
+            // Fallback: create a simple arrow if image fails to load
+            this.createFallbackArrow();
         };
         this.arrowImage.src = 'Arrow.png'; // Path relative to web version directory
+    }
+
+    createFallbackArrow() {
+        // Create a simple arrow shape as fallback
+        const canvas = document.createElement('canvas');
+        canvas.width = 60;
+        canvas.height = 24;
+        const ctx = canvas.getContext('2d');
+
+        // Draw a simple arrow pointing right
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.moveTo(0, 6);
+        ctx.lineTo(40, 6);
+        ctx.lineTo(40, 2);
+        ctx.lineTo(60, 12);
+        ctx.lineTo(40, 22);
+        ctx.lineTo(40, 18);
+        ctx.lineTo(0, 18);
+        ctx.closePath();
+        ctx.fill();
+
+        this.arrowImage = new Image();
+        this.arrowImage.src = canvas.toDataURL();
+        this.arrowImage.onload = () => {
+            this.arrowLoaded = true;
+            console.log('Fallback arrow created');
+        };
     }
 
     createBubbleGrid() {
@@ -130,12 +165,14 @@ class BubbleShooter {
 
         this.isMouseDown = true;
         this.aiming = true;
-        this.updateAim(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
+        const rect = this.canvas.getBoundingClientRect();
+        this.updateAim(e.clientX - rect.left, e.clientY - rect.top);
     }
 
     handleMouseMove(e) {
         if (!this.aiming) return;
-        this.updateAim(e.clientX - this.canvas.offsetLeft, e.clientY - this.canvas.offsetTop);
+        const rect = this.canvas.getBoundingClientRect();
+        this.updateAim(e.clientX - rect.left, e.clientY - rect.top);
     }
 
     handleMouseUp(e) {
@@ -152,16 +189,18 @@ class BubbleShooter {
 
         this.isMouseDown = true;
         this.aiming = true;
+        const rect = this.canvas.getBoundingClientRect();
         const touch = e.touches[0];
-        this.updateAim(touch.clientX - this.canvas.offsetLeft, touch.clientY - this.canvas.offsetTop);
+        this.updateAim(touch.clientX - rect.left, touch.clientY - rect.top);
     }
 
     handleTouchMove(e) {
         e.preventDefault();
         if (!this.aiming) return;
 
+        const rect = this.canvas.getBoundingClientRect();
         const touch = e.touches[0];
-        this.updateAim(touch.clientX - this.canvas.offsetLeft, touch.clientY - this.canvas.offsetTop);
+        this.updateAim(touch.clientX - rect.left, touch.clientY - rect.top);
     }
 
     handleTouchEnd(e) {
@@ -176,16 +215,26 @@ class BubbleShooter {
     updateAim(mouseX, mouseY) {
         const dx = mouseX - this.launcherX;
         const dy = mouseY - this.launcherY;
-        this.aimAngle = Math.atan2(dy, dx);
 
-        // Convert angle to be relative to positive Y axis (up)
-        // This ensures the arrow points in the correct direction
-        this.aimAngle = this.aimAngle - Math.PI / 2;
+        // Calculate angle from launcher to mouse position
+        let angle = Math.atan2(dy, dx);
 
-        // Limit angle to reasonable range (don't allow shooting too far back)
-        // Allow shooting from left to right, but not too far back
-        if (this.aimAngle < -Math.PI / 2) this.aimAngle = -Math.PI / 2;
-        if (this.aimAngle > Math.PI / 2) this.aimAngle = Math.PI / 2;
+        // Normalize angle to be between -π and π
+        while (angle > Math.PI) angle -= 2 * Math.PI;
+        while (angle < -Math.PI) angle += 2 * Math.PI;
+
+        // Limit angle to 80° on each side (total 160° range)
+        // Allow shooting from -80° to +80° (left to right)
+        const minAngle = -Math.PI * 80 / 180; // -80°
+        const maxAngle = Math.PI * 80 / 180;  // +80°
+
+        if (angle < minAngle) angle = minAngle;
+        if (angle > maxAngle) angle = maxAngle;
+
+        this.aimAngle = angle;
+
+        // Debug logging
+        console.log(`Mouse: (${mouseX}, ${mouseY}), Launcher: (${this.launcherX}, ${this.launcherY}), Raw angle: ${(angle * 180 / Math.PI).toFixed(1)}°, Final angle: ${(this.aimAngle * 180 / Math.PI).toFixed(1)}°`);
     }
 
     shootBubble() {
@@ -198,11 +247,10 @@ class BubbleShooter {
             -1, -1
         );
 
-        // Set velocity based on aim angle (convert back to standard angle for shooting)
-        const shootingAngle = this.aimAngle + Math.PI / 2; // Convert back to standard angle
+        // Set velocity based on aim angle
         const speed = 8;
-        this.shootingBubble.vx = Math.cos(shootingAngle) * speed;
-        this.shootingBubble.vy = Math.sin(shootingAngle) * speed;
+        this.shootingBubble.vx = Math.cos(this.aimAngle) * speed;
+        this.shootingBubble.vy = Math.sin(this.aimAngle) * speed;
 
         // Get next color
         this.nextBubbleColor = this.getRandomColor();
@@ -368,11 +416,19 @@ class BubbleShooter {
         this.ctx.lineWidth = 2;
         this.ctx.stroke();
 
-        // Draw arrow if loaded
+        // Draw arrow if loaded (always visible)
         if (this.arrowLoaded && this.arrowImage) {
             this.ctx.save();
             this.ctx.translate(this.launcherX, this.launcherY);
-            this.ctx.rotate(this.aimAngle - Math.PI / 2); // Rotate to point in aim direction
+            // Use current aim angle if aiming, otherwise use default
+            const rotationAngle = this.aiming ? this.aimAngle : this.defaultAimAngle;
+
+
+            // Rotate arrow to point in the correct direction
+            // If fallback arrow points right, rotate -90° to point up initially
+            const baseRotation = this.arrowLoaded && this.arrowImage.src.includes('data:') ? -Math.PI / 2 : 0;
+            this.ctx.rotate(rotationAngle + baseRotation);
+
             this.ctx.drawImage(
                 this.arrowImage,
                 -this.arrowWidth / 2,
