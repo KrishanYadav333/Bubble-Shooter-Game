@@ -2,11 +2,14 @@
 
 Welcome to **Bubble Shooter**! This is a fun and addictive puzzle game where you shoot colorful bubbles to create matches and clear the board. Pop bubbles of the same color to rack up points and try to clear all the bubbles before they reach the bottom!
 
-## 📂 Branches
+## 📂 Repository Structure
 
-- **main**: Latest stable version
-- **python-desktop**: Python/Pygame desktop version (current)
-- **web-version**: Upcoming web-based version (planned)
+This project has been split into separate repositories for better organization:
+
+- **[Bubble-Shooter-Python](https://github.com/yourusername/Bubble-Shooter-Python)**: Python/Pygame desktop version
+- **[Bubble-Shooter-Web](https://github.com/yourusername/Bubble-Shooter-Web)**: Web-based version for PC and mobile
+
+Each repository contains the complete implementation for its respective platform with optimized features and documentation.
 
 ## 🎮 Game Overview
 
