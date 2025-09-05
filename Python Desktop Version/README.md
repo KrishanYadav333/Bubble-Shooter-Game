@@ -1,4 +1,4 @@
-# Bubble Shooter - Python Desktop Version
+h# Bubble Shooter - Python Desktop Version
 
 A complete Python/Pygame implementation of the classic Bubble Shooter puzzle game, optimized for desktop computers with enhanced UI and smooth gameplay.
 

@@ -78,12 +78,42 @@ class BubbleShooter {
         this.arrowImage = new Image();
         this.arrowImage.onload = () => {
             this.arrowLoaded = true;
-            console.log('Arrow image loaded successfully');
+            console.log('Arrow image loaded successfully', this.arrowImage.width, 'x', this.arrowImage.height);
         };
         this.arrowImage.onerror = () => {
             console.error('Failed to load arrow image');
+            // Fallback: create a simple arrow if image fails to load
+            this.createFallbackArrow();
         };
         this.arrowImage.src = 'Arrow.png'; // Path relative to web version directory
+    }
+
+    createFallbackArrow() {
+        // Create a simple arrow shape as fallback
+        const canvas = document.createElement('canvas');
+        canvas.width = 60;
+        canvas.height = 24;
+        const ctx = canvas.getContext('2d');
+
+        // Draw a simple arrow pointing right
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.moveTo(0, 6);
+        ctx.lineTo(40, 6);
+        ctx.lineTo(40, 2);
+        ctx.lineTo(60, 12);
+        ctx.lineTo(40, 22);
+        ctx.lineTo(40, 18);
+        ctx.lineTo(0, 18);
+        ctx.closePath();
+        ctx.fill();
+
+        this.arrowImage = new Image();
+        this.arrowImage.src = canvas.toDataURL();
+        this.arrowImage.onload = () => {
+            this.arrowLoaded = true;
+            console.log('Fallback arrow created');
+        };
     }
 
     createBubbleGrid() {
@@ -204,7 +234,7 @@ class BubbleShooter {
         this.aimAngle = angle;
 
         // Debug logging
-        console.log(`Mouse: (${mouseX}, ${mouseY}), Launcher: (${this.launcherX}, ${this.launcherY}), Angle: ${(this.aimAngle * 180 / Math.PI).toFixed(1)}°`);
+        console.log(`Mouse: (${mouseX}, ${mouseY}), Launcher: (${this.launcherX}, ${this.launcherY}), Raw angle: ${(angle * 180 / Math.PI).toFixed(1)}°, Final angle: ${(this.aimAngle * 180 / Math.PI).toFixed(1)}°`);
     }
 
     shootBubble() {
@@ -394,11 +424,16 @@ class BubbleShooter {
             const rotationAngle = this.aiming ? this.aimAngle : this.defaultAimAngle;
 
 
-            // Handle arrow rotation - adjust for image orientation
-            // If arrow points right by default, we need to rotate it to point up
-            const adjustedAngle = rotationAngle - Math.PI / 2; // Convert from up-pointing to right-pointing
+            // Try different rotation approaches
+            // Option 1: Direct rotation (if arrow points up by default)
+            this.ctx.rotate(rotationAngle);
 
-            this.ctx.rotate(adjustedAngle);
+            // Option 2: If arrow points right, rotate to point up
+            // this.ctx.rotate(rotationAngle - Math.PI / 2);
+
+            // Option 3: If arrow points down, rotate to point up
+            // this.ctx.rotate(rotationAngle + Math.PI);
+
             this.ctx.drawImage(
                 this.arrowImage,
                 -this.arrowWidth / 2,
