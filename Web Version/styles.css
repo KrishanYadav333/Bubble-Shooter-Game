@@ -1,0 +1,263 @@
+/* Bubble Shooter Web Version - Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.game-container {
+    max-width: 980px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Header Styles */
+.game-header {
+    margin-bottom: 20px;
+}
+
+.game-title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.score-display, .next-bubble {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.score-label, .next-label {
+    font-weight: bold;
+    color: #00ffff;
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffff00;
+}
+
+/* Game Area */
+.game-area {
+    position: relative;
+    display: inline-block;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+#gameCanvas {
+    display: block;
+    background: linear-gradient(135deg, #000050 0%, #000080 100%);
+    cursor: crosshair;
+}
+
+/* Game Overlays */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.start-screen, .game-over-screen, .win-screen {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    max-width: 400px;
+    width: 90%;
+}
+
+.start-screen h2, .game-over-screen h2, .win-screen h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #00ffff;
+}
+
+.start-screen p, .game-over-screen p, .win-screen p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.final-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffff00;
+}
+
+/* Buttons */
+.start-btn, .restart-btn {
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+}
+
+.start-btn:hover, .restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
+}
+
+/* Controls Info */
+.controls-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.control-icon {
+    font-size: 1.5rem;
+}
+
+/* Footer */
+.game-footer {
+    margin-top: 30px;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+
+    .game-title {
+        font-size: 2rem;
+    }
+
+    .game-info {
+        gap: 20px;
+    }
+
+    .controls-info {
+        gap: 15px;
+    }
+
+    .control-item {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+        max-width: 940px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.8rem;
+    }
+
+    .game-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .controls-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .start-screen, .game-over-screen, .win-screen {
+        padding: 20px;
+    }
+
+    .start-screen h2, .game-over-screen h2, .win-screen h2 {
+        font-size: 2rem;
+    }
+}
+
+/* Animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.start-btn:hover {
+    animation: pulse 0.6s ease-in-out;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.7);
+}

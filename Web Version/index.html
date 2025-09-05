@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bubble Shooter - A fun puzzle game for web browsers">
+    <title>Bubble Shooter - Web Version</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="game-title">Bubble Shooter</h1>
+            <div class="game-info">
+                <div class="score-display">
+                    <span class="score-label">Score:</span>
+                    <span class="score-value" id="score">0</span>
+                </div>
+                <div class="next-bubble">
+                    <span class="next-label">Next:</span>
+                    <canvas id="nextBubbleCanvas" width="40" height="40"></canvas>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-area">
+            <canvas id="gameCanvas" width="940" height="740"></canvas>
+            <div class="game-overlay" id="gameOverlay">
+                <div class="start-screen">
+                    <h2>Welcome to Bubble Shooter!</h2>
+                    <p>Click or tap to aim, release to shoot bubbles of the same color!</p>
+                    <button id="startButton" class="start-btn">Start Game</button>
+                </div>
+                <div class="game-over-screen" id="gameOverScreen" style="display: none;">
+                    <h2>Game Over!</h2>
+                    <p class="final-score">Final Score: <span id="finalScore">0</span></p>
+                    <button id="restartButton" class="restart-btn">Play Again</button>
+                </div>
+                <div class="win-screen" id="winScreen" style="display: none;">
+                    <h2>Congratulations!</h2>
+                    <p>You cleared all bubbles!</p>
+                    <p class="final-score">Final Score: <span id="winScore">0</span></p>
+                    <button id="playAgainButton" class="restart-btn">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-info">
+            <div class="control-item">
+                <span class="control-icon">🖱️</span>
+                <span>Click & Drag to Aim</span>
+            </div>
+            <div class="control-item">
+                <span class="control-icon">👆</span>
+                <span>Touch & Drag (Mobile)</span>
+            </div>
+            <div class="control-item">
+                <span class="control-icon">🎯</span>
+                <span>Match 3+ Same Colors</span>
+            </div>
+        </div>
+
+        <footer class="game-footer">
+            <p>Built with HTML5 Canvas & JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
