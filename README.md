@@ -1,101 +1,63 @@
 # Bubble Shooter Game
 
-Welcome to **Bubble Shooter**! This is a fun and addictive puzzle game where you shoot colorful bubbles to create matches and clear the board. Pop bubbles of the same color to rack up points and try to clear all the bubbles before they reach the bottom!
+A cross-platform puzzle game where you shoot colorful bubbles to create matches and clear the board. Available in multiple implementations for different platforms.
 
-## 📂 Directory Structure
+## 🎮 About the Game
 
-This monorepo contains both versions of Bubble Shooter organized in separate directories:
+**Bubble Shooter** is a fun and addictive puzzle game where you shoot bubbles upwards to match them with bubbles of the same color already on the board. When you create a group of 3 or more bubbles of the same color, they pop! The goal is to clear all bubbles before they reach the bottom of the screen.
 
-### 🐍 Python Desktop Version/
-Complete Python/Pygame implementation for desktop computers:
-- `bubbleshooter.py` - Main game file
-- `requirements.txt` - Python dependencies
-- Audio files and game assets
-- Desktop-optimized features and controls
+## 📂 Project Structure
 
-### 🌐 Web Version/
-Upcoming web-based implementation for browsers:
+This monorepo contains multiple implementations of Bubble Shooter:
+
+### 🐍 [Python Desktop Version](./Python%20Desktop%20Version/)
+Complete Python/Pygame implementation for desktop computers with enhanced UI and smooth gameplay.
+
+**Key Features:**
+- Modern UI with improved graphics and layout
+- Desktop-optimized controls (keyboard)
+- Sound effects and background music
+- High-performance Pygame implementation
+
+**[📖 View Python Version README](./Python%20Desktop%20Version/README.md)**
+
+### 🌐 [Web Version](./Web%20Version/)
+Upcoming web-based implementation for browsers and mobile devices.
+
+**Planned Features:**
 - HTML5 Canvas implementation
-- Touch controls for mobile devices
+- Touch controls for mobile
 - Responsive design
 - Cross-platform compatibility
+- Progressive Web App support
 
-Each directory contains the complete implementation for its respective platform with optimized features and documentation.
+**[📖 View Web Version README](./Web%20Version/README.md)**
 
-## 🎮 Game Overview
-
-In Bubble Shooter, you're armed with a launcher at the bottom of the screen. Your goal is to shoot bubbles upwards to match them with bubbles of the same color already on the board. When you create a group of 3 or more bubbles of the same color, they pop! The more bubbles you pop at once, the higher your score.
-
-But watch out – if the bubbles reach the bottom of the screen, it's game over! Use strategy to clear the board efficiently and aim for the highest score possible.
-
-## ✨ Features
-
-- **Colorful Graphics**: Vibrant bubbles with smooth animations and visual effects
-- **Intuitive Controls**: Simple arrow key aiming and spacebar shooting
-- **Dynamic Gameplay**: Random bubble colors keep each game fresh
-- **Score Tracking**: Keep track of your points as you play
-- **Sound Effects**: Enjoy popping sounds when you make matches
-- **Background Music**: Relaxing tunes to enhance your gaming experience
-
-## 🎯 How to Play
-
-1. **Aim**: Use the left and right arrow keys to rotate the launcher and aim your shot
-2. **Shoot**: Press the spacebar to launch a bubble towards the target
-3. **Match**: Try to hit bubbles of the same color to create groups of 3 or more
-4. **Pop**: When you make a match, the bubbles disappear and you earn points!
-5. **Clear the Board**: Keep shooting until all bubbles are cleared or you win
-6. **Avoid Game Over**: Don't let the bubbles reach the bottom of the screen
-
-## 🕹️ Controls
-
-- **Left Arrow**: Rotate launcher left
-- **Right Arrow**: Rotate launcher right
-- **Spacebar**: Shoot bubble
-- **Escape**: Quit game
-- **Enter**: Restart after game over
-
-## 📋 Requirements
-
-- Python 3.x
-- Pygame library
-- Audio files (included): audio1.ogg, audio2.ogg, audio3.ogg, popcork.ogg
-- Image files (included): Arrow.png, bubbleshoot.gif
-
-## 🚀 Installation & Running
+## 🚀 Quick Start
 
 ### Python Desktop Version
-
-1. Make sure you have Python 3.x installed
-2. Navigate to the Python Desktop Version directory: `cd "Python Desktop Version"`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Run the game: `python bubbleshooter.py`
+```bash
+cd "Python Desktop Version"
+pip install -r requirements.txt
+python bubbleshooter.py
+```
 
 ### Web Version
+*Coming soon - check the Web Version directory for updates*
 
-The web version is currently under development. Check the `Web Version/` directory for updates.
+## 🎯 Game Controls
 
-## 🎨 Game Assets
-
-The game includes several assets:
-- **Arrow.png**: The aiming arrow image
-- **Audio files**: Background music and sound effects
-- **bubbleshoot.gif**: Game preview image
-
-## 🏆 Tips for Success
-
-- **Aim for Clusters**: Target areas where you can create large groups of matching bubbles
-- **Use the Walls**: Bubbles bounce off the sides, so use that to your advantage
-- **Plan Ahead**: Think about how your shots will affect the board layout
-- **Chain Reactions**: Sometimes popping one group creates opportunities for more pops
+- **Desktop**: Arrow keys to aim, Spacebar to shoot
+- **Web/Mobile**: Touch controls (planned)
 
 ## 🤝 Contributing
 
-Feel free to contribute to this project! Whether it's bug fixes, new features, or improvements to the gameplay, all contributions are welcome.
+We welcome contributions to both versions! Each implementation has its own README with specific contribution guidelines.
 
 ## 📄 License
 
-This project is open source. Feel free to use, modify, and distribute as you see fit.
+This project is open source. Each version may have its own licensing terms - please check the individual README files.
 
 ---
 
-**Enjoy playing Bubble Shooter!** 🎈
+**Choose your platform and start popping bubbles!** 🎈
