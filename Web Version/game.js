@@ -47,7 +47,7 @@ class BubbleShooter {
         this.arrowLoaded = false;
         this.arrowWidth = 60;
         this.arrowHeight = 24;
-        this.defaultAimAngle = 0; // Point straight up by default
+        this.defaultAimAngle = Math.PI / 2; // Point straight right by default (90°)
 
         // Mouse/Touch handling
         this.mouseX = 0;
@@ -187,15 +187,21 @@ class BubbleShooter {
         const dy = mouseY - this.launcherY;
 
         // Calculate angle from launcher to mouse position
-        this.aimAngle = Math.atan2(dy, dx);
+        let angle = Math.atan2(dy, dx);
+
+        // Normalize angle to be between -π and π
+        while (angle > Math.PI) angle -= 2 * Math.PI;
+        while (angle < -Math.PI) angle += 2 * Math.PI;
 
         // Limit angle to prevent shooting too far back
         // Allow shooting from -90° to +90° (left to right)
         const minAngle = -Math.PI / 2; // -90°
         const maxAngle = Math.PI / 2;  // +90°
 
-        if (this.aimAngle < minAngle) this.aimAngle = minAngle;
-        if (this.aimAngle > maxAngle) this.aimAngle = maxAngle;
+        if (angle < minAngle) angle = minAngle;
+        if (angle > maxAngle) angle = maxAngle;
+
+        this.aimAngle = angle;
 
         // Debug logging
         console.log(`Mouse: (${mouseX}, ${mouseY}), Launcher: (${this.launcherX}, ${this.launcherY}), Angle: ${(this.aimAngle * 180 / Math.PI).toFixed(1)}°`);
@@ -386,14 +392,37 @@ class BubbleShooter {
             this.ctx.translate(this.launcherX, this.launcherY);
             // Use current aim angle if aiming, otherwise use default
             const rotationAngle = this.aiming ? this.aimAngle : this.defaultAimAngle;
-            this.ctx.rotate(rotationAngle);
-            this.ctx.drawImage(
-                this.arrowImage,
-                -this.arrowWidth / 2,
-                -this.arrowHeight / 2,
-                this.arrowWidth,
-                this.arrowHeight
-            );
+
+            // Debug: Draw angle indicator
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, 30, 0, rotationAngle, false);
+            this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+            this.ctx.lineWidth = 2;
+            this.ctx.stroke();
+
+            // Handle arrow rotation with proper flipping for left side
+            if (rotationAngle < 0) {
+                // For left side, flip the image horizontally
+                this.ctx.scale(-1, 1);
+                this.ctx.rotate(-rotationAngle); // Use positive angle after flip
+                this.ctx.drawImage(
+                    this.arrowImage,
+                    -this.arrowWidth / 2,
+                    -this.arrowHeight / 2,
+                    this.arrowWidth,
+                    this.arrowHeight
+                );
+            } else {
+                // For right side, draw normally
+                this.ctx.rotate(rotationAngle);
+                this.ctx.drawImage(
+                    this.arrowImage,
+                    -this.arrowWidth / 2,
+                    -this.arrowHeight / 2,
+                    this.arrowWidth,
+                    this.arrowHeight
+                );
+            }
             this.ctx.restore();
         }
     }
