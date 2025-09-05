@@ -2,14 +2,25 @@
 
 Welcome to **Bubble Shooter**! This is a fun and addictive puzzle game where you shoot colorful bubbles to create matches and clear the board. Pop bubbles of the same color to rack up points and try to clear all the bubbles before they reach the bottom!
 
-## 📂 Repository Structure
+## 📂 Directory Structure
 
-This project has been split into separate repositories for better organization:
+This monorepo contains both versions of Bubble Shooter organized in separate directories:
 
-- **[Bubble-Shooter-Python](https://github.com/KrishanYadav333/Bubble-Shooter-Python)**: Python/Pygame desktop version
-- **[Bubble-Shooter-Web](https://github.com/KrishanYadav333/Bubble-Shooter-Web)**: Web-based version for PC and mobile
+### 🐍 Python Desktop Version/
+Complete Python/Pygame implementation for desktop computers:
+- `bubbleshooter.py` - Main game file
+- `requirements.txt` - Python dependencies
+- Audio files and game assets
+- Desktop-optimized features and controls
 
-Each repository contains the complete implementation for its respective platform with optimized features and documentation.
+### 🌐 Web Version/
+Upcoming web-based implementation for browsers:
+- HTML5 Canvas implementation
+- Touch controls for mobile devices
+- Responsive design
+- Cross-platform compatibility
+
+Each directory contains the complete implementation for its respective platform with optimized features and documentation.
 
 ## 🎮 Game Overview
 
@@ -52,10 +63,16 @@ But watch out – if the bubbles reach the bottom of the screen, it's game over!
 
 ## 🚀 Installation & Running
 
+### Python Desktop Version
+
 1. Make sure you have Python 3.x installed
-2. Download or clone this repository
+2. Navigate to the Python Desktop Version directory: `cd "Python Desktop Version"`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Run the game: `python bubbleshooter.py`
+
+### Web Version
+
+The web version is currently under development. Check the `Web Version/` directory for updates.
 
 ## 🎨 Game Assets
 
