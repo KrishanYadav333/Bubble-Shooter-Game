@@ -42,6 +42,12 @@ class BubbleShooter {
         this.launcherX = this.WIDTH / 2;
         this.launcherY = this.HEIGHT - 30;
 
+        // Arrow properties
+        this.arrowImage = null;
+        this.arrowLoaded = false;
+        this.arrowWidth = 60;
+        this.arrowHeight = 24;
+
         // Mouse/Touch handling
         this.mouseX = 0;
         this.mouseY = 0;
@@ -57,11 +63,22 @@ class BubbleShooter {
         this.canvas.width = this.WIDTH;
         this.canvas.height = this.HEIGHT;
 
+        // Load arrow image
+        this.loadArrowImage();
+
         // Create initial bubble grid
         this.createBubbleGrid();
 
         // Draw next bubble preview
         this.drawNextBubble();
+    }
+
+    loadArrowImage() {
+        this.arrowImage = new Image();
+        this.arrowImage.onload = () => {
+            this.arrowLoaded = true;
+        };
+        this.arrowImage.src = 'Arrow.png'; // Path relative to web version directory
     }
 
     createBubbleGrid() {
@@ -161,9 +178,14 @@ class BubbleShooter {
         const dy = mouseY - this.launcherY;
         this.aimAngle = Math.atan2(dy, dx);
 
+        // Convert angle to be relative to positive Y axis (up)
+        // This ensures the arrow points in the correct direction
+        this.aimAngle = this.aimAngle - Math.PI / 2;
+
         // Limit angle to reasonable range (don't allow shooting too far back)
-        if (this.aimAngle < 0) this.aimAngle = 0;
-        if (this.aimAngle > Math.PI) this.aimAngle = Math.PI;
+        // Allow shooting from left to right, but not too far back
+        if (this.aimAngle < -Math.PI / 2) this.aimAngle = -Math.PI / 2;
+        if (this.aimAngle > Math.PI / 2) this.aimAngle = Math.PI / 2;
     }
 
     shootBubble() {
@@ -176,10 +198,11 @@ class BubbleShooter {
             -1, -1
         );
 
-        // Set velocity based on aim angle
+        // Set velocity based on aim angle (convert back to standard angle for shooting)
+        const shootingAngle = this.aimAngle + Math.PI / 2; // Convert back to standard angle
         const speed = 8;
-        this.shootingBubble.vx = Math.cos(this.aimAngle) * speed;
-        this.shootingBubble.vy = Math.sin(this.aimAngle) * speed;
+        this.shootingBubble.vx = Math.cos(shootingAngle) * speed;
+        this.shootingBubble.vy = Math.sin(shootingAngle) * speed;
 
         // Get next color
         this.nextBubbleColor = this.getRandomColor();
@@ -331,16 +354,12 @@ class BubbleShooter {
             this.shootingBubble.draw(this.ctx, this.BUBBLE_RADIUS);
         }
 
-        // Draw launcher
+        // Draw launcher with arrow
         this.drawLauncher();
-
-        // Draw aim line when aiming
-        if (this.aiming) {
-            this.drawAimLine();
-        }
     }
 
     drawLauncher() {
+        // Draw launcher base
         this.ctx.beginPath();
         this.ctx.arc(this.launcherX, this.launcherY, 25, 0, Math.PI * 2);
         this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
@@ -348,32 +367,23 @@ class BubbleShooter {
         this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         this.ctx.lineWidth = 2;
         this.ctx.stroke();
+
+        // Draw arrow if loaded
+        if (this.arrowLoaded && this.arrowImage) {
+            this.ctx.save();
+            this.ctx.translate(this.launcherX, this.launcherY);
+            this.ctx.rotate(this.aimAngle - Math.PI / 2); // Rotate to point in aim direction
+            this.ctx.drawImage(
+                this.arrowImage,
+                -this.arrowWidth / 2,
+                -this.arrowHeight / 2,
+                this.arrowWidth,
+                this.arrowHeight
+            );
+            this.ctx.restore();
+        }
     }
 
-    drawAimLine() {
-        const lineLength = 100;
-        const endX = this.launcherX + Math.cos(this.aimAngle) * lineLength;
-        const endY = this.launcherY + Math.sin(this.aimAngle) * lineLength;
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.launcherX, this.launcherY);
-        this.ctx.lineTo(endX, endY);
-        this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        this.ctx.lineWidth = 3;
-        this.ctx.stroke();
-
-        // Draw arrow head
-        const arrowSize = 10;
-        const angle1 = this.aimAngle - Math.PI / 6;
-        const angle2 = this.aimAngle + Math.PI / 6;
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(endX, endY);
-        this.ctx.lineTo(endX - Math.cos(angle1) * arrowSize, endY - Math.sin(angle1) * arrowSize);
-        this.ctx.moveTo(endX, endY);
-        this.ctx.lineTo(endX - Math.cos(angle2) * arrowSize, endY - Math.sin(angle2) * arrowSize);
-        this.ctx.stroke();
-    }
 
     gameLoop() {
         this.update();
