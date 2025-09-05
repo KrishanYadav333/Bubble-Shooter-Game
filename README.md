@@ -6,8 +6,8 @@ Welcome to **Bubble Shooter**! This is a fun and addictive puzzle game where you
 
 This project has been split into separate repositories for better organization:
 
-- **[Bubble-Shooter-Python](https://github.com/yourusername/Bubble-Shooter-Python)**: Python/Pygame desktop version
-- **[Bubble-Shooter-Web](https://github.com/yourusername/Bubble-Shooter-Web)**: Web-based version for PC and mobile
+- **[Bubble-Shooter-Python](https://github.com/KrishanYadav333/Bubble-Shooter-Python)**: Python/Pygame desktop version
+- **[Bubble-Shooter-Web](https://github.com/KrishanYadav333/Bubble-Shooter-Web)**: Web-based version for PC and mobile
 
 Each repository contains the complete implementation for its respective platform with optimized features and documentation.
 
